@@ -56,6 +56,14 @@ through the pipeline.
 All credentials live in `.env`. Never commit it. See `.env.example` for the
 exact set of variables and where to obtain each value.
 
+## Docs
+
+- [Architecture](docs/architecture.md) — how the pieces fit together.
+- [Hardware shopping list](docs/hardware-shopping-list.md) — BOM, sources,
+  pitfalls for the ESP32 mic node and the optional OpenWrt router.
+- [Testing plan](docs/testing-plan.md) — manual runbook for M0 / M1 / M2,
+  including the fault-injection cases.
+
 ## License
 
 Personal use, no warranty.
