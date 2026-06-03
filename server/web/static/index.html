@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>voice-router-agent</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <h1>voice-router-agent</h1>
+    <div class="network" id="network">
+      <span class="dot" id="net-dot"></span>
+      <span id="net-text">网络状态加载中…</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="panel">
+      <h2>语音指令</h2>
+      <p class="hint">按住 <kbd>F2</kbd> 或下方按钮说话，松开后发送。</p>
+      <button id="talk-btn">按住说话</button>
+      <div class="transcript">
+        <div class="label">识别结果</div>
+        <div class="value" id="transcript">—</div>
+      </div>
+      <div class="transcript">
+        <div class="label">助理回复</div>
+        <div class="value" id="reply">—</div>
+      </div>
+      <audio id="tts-player" controls hidden></audio>
+    </section>
+
+    <section class="panel">
+      <h2>文本调试</h2>
+      <form id="text-form">
+        <input id="text-input" placeholder="例如：把客厅的灯打开" autocomplete="off" />
+        <button type="submit">发送</button>
+      </form>
+    </section>
+
+    <section class="panel">
+      <h2>设备状态</h2>
+      <ul id="device-list" class="device-list"></ul>
+    </section>
+  </main>
+
+  <script src="/app.js" type="module"></script>
+</body>
+</html>

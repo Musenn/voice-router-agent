@@ -1,0 +1,26 @@
+// Copy this file to config.h and fill in real values. config.h is gitignored.
+#pragma once
+
+// WiFi
+#define WIFI_SSID        "your-ssid"
+#define WIFI_PASSWORD    "your-password"
+
+// Hub (the machine running server/main.py)
+#define HUB_HOST         "192.168.1.100"
+#define HUB_PORT         28080
+#define HUB_WS_PATH      "/ws/audio"
+
+// Audio
+#define SAMPLE_RATE_HZ   16000
+#define I2S_BCLK_PIN     4
+#define I2S_LRCLK_PIN    5
+#define I2S_DIN_PIN      6
+
+// Push button (pulled up; active LOW)
+#define BUTTON_PIN       0
+
+// Onboard RGB LED for status feedback (set to -1 if unavailable)
+#define STATUS_LED_PIN   48
+
+// Send PCM frames in chunks of this many samples (~32 ms @ 16 kHz)
+#define FRAME_SAMPLES    512

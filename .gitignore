@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.python-version
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+credentials.json
+secrets.yaml
+secrets.yml
+config.local.*
+
+# Audio dumps / runtime artifacts
+data/
+recordings/
+*.wav
+*.mp3
+*.pcm
+!tests/fixtures/*.wav
+logs/
+*.log
+
+# Firmware build artifacts
+firmware/.pio/
+firmware/.vscode/
+firmware/include/config.h
+firmware/build/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini
