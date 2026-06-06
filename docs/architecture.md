@@ -1,5 +1,7 @@
 # Architecture
 
+> English · [中文](architecture.zh-CN.md)
+
 A short note on how the pieces fit together. Read this first if you want to
 extend or fork the project.
 

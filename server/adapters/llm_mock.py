@@ -7,6 +7,7 @@ from loguru import logger
 from server.adapters.llm_base import LLMClient, LLMResponse, ToolCall
 
 
+# 规则表：(正则, 命中后调用的工具名, 工具参数)。按顺序匹配，命中第一条即返回。
 _RULES: list[tuple[re.Pattern[str], str, dict[str, Any]]] = [
     (re.compile(r"打开|开启|开.*灯"), "set_device_state",
      {"device_id": "light_livingroom", "state": "on"}),
@@ -20,14 +21,17 @@ _RULES: list[tuple[re.Pattern[str], str, dict[str, Any]]] = [
 
 
 class MockLLM(LLMClient):
-    """Pattern-matches on user text. Lets you exercise the whole pipeline
-    without an LLM provider configured."""
+    """模拟 LLM：用正则匹配用户文本来挑选工具。
+
+    在未配置真实大模型时，可以用它跑通整条管线（无需任何云端账号）。
+    """
 
     async def chat(
         self,
         messages: list[dict[str, Any]],
         tools: list[dict[str, Any]] | None = None,
     ) -> LLMResponse:
+        # 取最近一条用户消息作为匹配输入
         last_user = next(
             (m["content"] for m in reversed(messages) if m.get("role") == "user"),
             "",
@@ -35,8 +39,10 @@ class MockLLM(LLMClient):
         text = last_user if isinstance(last_user, str) else json.dumps(last_user)
         logger.debug("MockLLM input: {!r}", text)
 
+        # 命中任一规则即返回对应工具调用
         for pattern, tool_name, args in _RULES:
             if pattern.search(text):
                 return LLMResponse(tool_calls=[ToolCall(name=tool_name, arguments=args)])
 
+        # 全部未命中：返回一句兜底文本，不触发任何工具
         return LLMResponse(text="我没听懂这个指令，可以换种说法吗？")

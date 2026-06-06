@@ -13,23 +13,23 @@ _SHORT_ASR_URL = "https://nls-gateway-cn-shanghai.aliyuncs.com/stream/v1/asr"
 
 
 class AliyunShortASR(ASRClient):
-    """Aliyun NLS short-sentence recognition (一句话识别).
+    """阿里云智能语音交互（NLS）「一句话识别」适配器。
 
-    Two-step flow:
-      1. Exchange access key / secret for a temporary token (~24h validity).
-      2. POST raw audio to the stream/v1/asr endpoint with the token.
+    调用分两步：
+      1. 用 AccessKey ID / Secret 换取一个临时 Token（有效期约 24 小时）。
+      2. 带上 Token，把原始音频 POST 到 stream/v1/asr 接口。
 
-    The official aliyunsdkcore signature is non-trivial; we cache the token
-    and re-fetch when it expires. If you swap regions, update the endpoints
-    above to match.
+    官方 aliyunsdkcore 的签名流程较繁琐，这里把 Token 缓存起来，过期后再重新获取。
+    如果切换地域（region），需要同步修改上方的接口地址常量。
     """
 
     def __init__(self) -> None:
-        self._token: str | None = None
-        self._token_expiry: float = 0.0
+        self._token: str | None = None          # 缓存的 Token
+        self._token_expiry: float = 0.0          # Token 过期时间（Unix 时间戳）
         self._appkey = settings.aliyun_nls_appkey
 
     async def _get_token(self) -> str:
+        # Token 未过期（留 60 秒余量）则直接复用缓存，避免每次识别都重新签发
         if self._token and time.time() < self._token_expiry - 60:
             return self._token
 
@@ -56,6 +56,7 @@ class AliyunShortASR(ASRClient):
             raise RuntimeError(f"Aliyun token response missing Id: {payload}")
 
         self._token = token
+        # 接口未返回过期时间时，保守地按 1 小时后过期处理
         self._token_expiry = float(expire_at) if expire_at else time.time() + 3600
         logger.debug("Refreshed Aliyun NLS token, expires at {}", self._token_expiry)
         return token
@@ -64,9 +65,10 @@ class AliyunShortASR(ASRClient):
         token = await self._get_token()
         params = {
             "appkey": self._appkey,
-            "format": "pcm",
+            "format": "pcm",                              # 上传的是原始 PCM
             "sample_rate": sample_rate,
-            "enable_punctuation_prediction": "true",
+            "enable_punctuation_prediction": "true",      # 开启标点预测
+            # 开启 ITN 数字规范化（如「一百」→「100」）
             "enable_inverse_text_normalization": "true",
         }
         headers = {
@@ -84,6 +86,7 @@ class AliyunShortASR(ASRClient):
             resp.raise_for_status()
             body = resp.json()
 
+        # 20000000 是阿里云 NLS 约定的「成功」状态码，其余一律视为失败
         if body.get("status") != 20000000:
             raise RuntimeError(f"Aliyun ASR failed: {body}")
         result = body.get("result", "").strip()

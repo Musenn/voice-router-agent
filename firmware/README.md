@@ -1,5 +1,7 @@
 # ESP32-S3 firmware
 
+> English · [中文](README.zh-CN.md)
+
 Push-to-talk mic node. Holds a button, streams 16 kHz / 16-bit / mono PCM
 over WebSocket to the hub service, then waits for the next button press.
 

@@ -1,7 +1,13 @@
-"""LLM tool schemas. Adding a new tool here makes it available to the LLM
-on the next request — no other change required."""
+"""LLM 工具（function calling）的 schema 定义。
 
+在这里新增一个工具，下一次请求时 LLM 就能用它——无需改动其他任何代码
+（编排器 IntentOrchestrator._dispatch 里再补上对应的执行分支即可）。
+"""
+
+# 注：下方 description 是发给 LLM 的功能性字段，保持英文以贴合多数模型的训练语料，
+# 各工具的中文释义见每个工具上方的注释。
 TOOLS: list[dict] = [
+    # set_device_state：开关某个智能家电，或修改其参数（亮度/温度/模式等）
     {
         "type": "function",
         "function": {
@@ -37,6 +43,7 @@ TOOLS: list[dict] = [
             },
         },
     },
+    # list_devices：列出所有已知家电及其当前状态
     {
         "type": "function",
         "function": {
@@ -45,6 +52,7 @@ TOOLS: list[dict] = [
             "parameters": {"type": "object", "properties": {}},
         },
     },
+    # router_reboot：整机重启家庭路由器（破坏性操作，需先经用户确认）
     {
         "type": "function",
         "function": {
@@ -53,6 +61,7 @@ TOOLS: list[dict] = [
             "parameters": {"type": "object", "properties": {}},
         },
     },
+    # router_restart_wifi：仅重启路由器 WiFi 射频，不整机重启
     {
         "type": "function",
         "function": {

@@ -1,5 +1,7 @@
 # Testing plan
 
+> English · [中文](testing-plan.zh-CN.md)
+
 How to verify each milestone end-to-end. Every check has a concrete
 observable — none of the "looks fine" judgments. Automated tests will
 arrive later; for now this is a manual smoke-test runbook.

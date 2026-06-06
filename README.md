@@ -1,5 +1,7 @@
 # voice-router-agent
 
+> English · [中文](README.zh-CN.md)
+
 A small voice-controlled hub for the home network and a handful of mock smart
 appliances. Speak a command, the audio is transcribed by a cloud ASR service,
 an LLM decides which tool to call, the tool fires, and a TTS voice talks

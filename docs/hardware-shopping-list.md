@@ -1,5 +1,7 @@
 # Hardware shopping list
 
+> English · [中文](hardware-shopping-list.zh-CN.md)
+
 For the M1 wireless mic node and the optional M2 router-rescue setup.
 Prices are RMB and reflect typical 2026 Taobao listings; check before
 buying — they drift.
